@@ -15,6 +15,13 @@ length(lista_sc)
 unzip(tf, files=lista_nome[lista_sc], exdir=td, overwrite=TRUE)
 for (i in lista_nome[lista_sc]) {
         fpath <- file.path(td, i)
-        assign(i, read.csv(fpath, sep=";", fileEncoding = "latin1"))}
+        assign(i, read.csv(fpath, sep=";", fileEncoding = "latin1", colClasses = "character"))} # para leitura de todas as colunas como character
+#### Transforma campos Valor.receita e Valor Despesa para número
+
+
+#### Remove colunas inúteis
+
+
+#### Formata o campo data
 
 
