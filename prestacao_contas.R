@@ -27,10 +27,33 @@ receitas_partidos_parcial_2016_SC.txt$Valor.receita <- as.numeric(gsub("[,]","."
 
 #### Remove colunas inúteis
 despesas_candidatos <- despesas_candidatos_parcial_2016_SC.txt[,c(4, 8, 9, 10, 11, 12, 13, 17, 19:25)]
-despesas_partidos <- despesas_partidos_parcial_2016_SC.txt[,c(4,8, 9, 10, 13, 15, 17:21)]
 receitas_candidatos <- receitas_candidatos_parcial_2016_SC.txt[, c(4,8, 9, 10,11, 12, 13, 17, 19, 20:35)]
+despesas_partidos <- despesas_partidos_parcial_2016_SC.txt[,c(4,8, 9, 10, 13, 15, 17:21)]
 receitas_partidos <- receitas_partidos_parcial_2016_SC.txt[, c(4,8,9,10,13, 15,17:25)]
 
 #### Formata o campo data
+despesas_candidatos$Data.da.despesa <- as.Date(substr(despesas_candidatos$Data.da.despesa, 1,10), "%d/%m/%Y")
+receitas_candidatos$Data.da.receita <- as.Date(substr(receitas_candidatos$Data.da.receita, 1,10), "%d/%m/%Y")
+# precisa ajuste de formato de data para dados dos partidos ## 
+##### receita
+receitas_partidos$Data.da.receita <- gsub("MAY", "05", receitas_partidos$Data.da.receita)
+receitas_partidos$Data.da.receita <- gsub("JUN", "06", receitas_partidos$Data.da.receita)
+receitas_partidos$Data.da.receita <- gsub("JUL", "07", receitas_partidos$Data.da.receita)
+receitas_partidos$Data.da.receita <- gsub("AUG", "08", receitas_partidos$Data.da.receita)
+receitas_partidos$Data.da.receita <- gsub("SEP", "09", receitas_partidos$Data.da.receita)
+receitas_partidos$Data.da.receita <- as.Date(substr(receitas_partidos$Data.da.receita, 1,8), "%d-%m-%Y")
+##### despesas
+despesas_partidos$Data.da.despesa <- gsub("JAN", "01", despesas_partidos$Data.da.despesa)
+despesas_partidos$Data.da.despesa <- gsub("FEB", "02", despesas_partidos$Data.da.despesa)
+despesas_partidos$Data.da.despesa <- gsub("MAY", "05", despesas_partidos$Data.da.despesa)
+despesas_partidos$Data.da.despesa <- gsub("JUN", "06", despesas_partidos$Data.da.despesa)
+despesas_partidos$Data.da.despesa <- gsub("JUL", "07", despesas_partidos$Data.da.despesa)
+despesas_partidos$Data.da.despesa <- gsub("AUG", "08", despesas_partidos$Data.da.despesa)
+despesas_partidos$Data.da.despesa <- gsub("SEP", "09", despesas_partidos$Data.da.despesa)
+despesas_partidos$Data.da.despesa <- as.Date(substr(despesas_partidos$Data.da.despesa, 1,8), "%d-%m-%Y")
+### transformar em factor
+head(despesas_partidos[ , c("Data.da.despesa", "Valor.despesa")])
 
+## curiosidades
 
+## influênca das pesquisas na arrecadação
