@@ -54,6 +54,28 @@ despesas_partidos$Data.da.despesa <- as.Date(substr(despesas_partidos$Data.da.de
 ### transformar em factor
 head(despesas_partidos[ , c("Data.da.despesa", "Valor.despesa")])
 
-## curiosidades
+### Ajuste de campos para para factor
+col_factor <- names(select(receitas_partidos, -Data.da.receita, -Valor.receita))
+for (i in col_factor) {receitas_partidos[,i ] <- as.factor(receitas_partidos[,i])}
+  
+col_factor <- names(select(receitas_candidatos, -Data.da.receita, -Valor.receita))
+for (i in col_factor) {receitas_candidatos[,i ] <- as.factor(receitas_candidatos[,i])}
 
-## influênca das pesquisas na arrecadação
+col_factor <- names(select(despesas_partidos, -Data.da.despesa, -Valor.despesa))
+for (i in col_factor) {despesas_partidos[,i ] <- as.factor(despesas_partidos[,i])}
+
+col_factor <- names(select(despesas_candidatos, -Data.da.despesa, -Valor.despesa))
+for (i in col_factor) {despesas_candidatos[,i ] <- as.factor(despesas_candidatos[,i])}
+
+
+## curiosidades
+## Candidatos a prefeito e vereadores que mais receberam
+rec_vereador_florianopolis <- filter (receitas_candidatos[,c(2,3,5,6,9,16) ], Nome.da.UE == "FLORIANÓPOLIS" & Cargo == "Vereador")
+arrange(summarise(group_by(rec_vereador_florianopolis, Nome.candidato, Sigla..Partido), valor= sum(Valor.receita)), desc(valor))[1:20,]
+rec_prefeito_florianopolis <- filter (receitas_candidatos[,c(2,3,5,6,9,16) ], Nome.da.UE == "FLORIANÓPOLIS" & Cargo == "Prefeito")
+arrange(summarise(group_by(rec_prefeito_florianopolis, Nome.candidato), valor= sum(Valor.receita)), desc(valor))
+
+
+## Maiores financiadores de cand. prefeitos 
+arrange(summarise(group_by(rec_prefeito_florianopolis,  Nome.do.doador..Receita.Federal.), valor= sum(Valor.receita)), desc(valor))
+arrange(summarise(group_by(rec_vereador_florianopolis,  Nome.do.doador..Receita.Federal.), valor= sum(Valor.receita)), desc(valor))[1:20,]
