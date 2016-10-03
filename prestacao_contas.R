@@ -2,6 +2,8 @@
 ## Baixando e extraindo dados do TSE
 ### Carrega library
 library(dplyr)
+library(tidyr)
+
 
 ### Dados da prestacao de contas parcial
 loc.url <- "http://agencia.tse.jus.br/estatistica/sead/odsele/prestacao_contas/prestacao_contas_parcial_2016.zip"
@@ -73,9 +75,18 @@ for (i in col_factor) {despesas_candidatos[,i ] <- as.factor(despesas_candidatos
 rec_vereador_florianopolis <- filter (receitas_candidatos[,c(2,3,5,6,9,16) ], Nome.da.UE == "FLORIANÓPOLIS" & Cargo == "Vereador")
 arrange(summarise(group_by(rec_vereador_florianopolis, Nome.candidato, Sigla..Partido), valor= sum(Valor.receita)), desc(valor))[1:20,]
 rec_prefeito_florianopolis <- filter (receitas_candidatos[,c(2,3,5,6,9,16) ], Nome.da.UE == "FLORIANÓPOLIS" & Cargo == "Prefeito")
-arrange(summarise(group_by(rec_prefeito_florianopolis, Nome.candidato), valor= sum(Valor.receita)), desc(valor))
+arrange(summarise(group_by(rec_prefeito_florianopolis, Nome.candidato), valor= sum(Valor.receita)), desc(valor))[1:20,]
 
 
 ## Maiores financiadores de cand. prefeitos 
-arrange(summarise(group_by(rec_prefeito_florianopolis,  Nome.do.doador..Receita.Federal.), valor= sum(Valor.receita)), desc(valor))
+arrange(summarise(group_by(rec_prefeito_florianopolis,  Nome.do.doador..Receita.Federal.), valor= sum(Valor.receita)), desc(valor))[1:20,]
 arrange(summarise(group_by(rec_vereador_florianopolis,  Nome.do.doador..Receita.Federal.), valor= sum(Valor.receita)), desc(valor))[1:20,]
+
+## cruzar informação entre doadores e candidatos
+teste <-arrange(summarise(group_by(rec_prefeito_florianopolis,  Doador = Nome.do.doador..Receita.Federal.,
+                                  Cand = Nome.candidato), 
+                                  valor= sum(Valor.receita)),
+                desc(valor))
+matrix <- spread(teste, Doador, valor)
+matrix[is.na(matrix)] <- 0 
+heatmaply(matrix)
